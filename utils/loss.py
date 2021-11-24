@@ -154,6 +154,8 @@ class ComputeLoss:
                     vis = tkp[..., 2] > 0
                     tkp_vis = tkp[vis]
                     if len(tkp_vis):
+                        # self.nc = 17 + 1
+                        # self.yaml['nc'] = self.nc + 17 + 17
                         pkp = ps[:, 5 + self.nc:].reshape((-1, self.num_coords // 2, 2))
                         pkp = (pkp.sigmoid() * 4. - 2.) * anchors[i][:, None, :]  # range [-2, 2] * anchor
                         pkp_vis = pkp[vis]

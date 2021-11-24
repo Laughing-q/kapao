@@ -103,6 +103,7 @@ def post_process_batch(data, imgs, paths, shapes, person_dets, kp_dets,
                 if data['use_kp_dets'] and nkp:
                     mask = scores > data['conf_thres_kp_person']
                     poses_mask = poses[mask]
+                    print('before:', poses_mask)
 
                     if len(poses_mask):
                         kpd[:, :4] = scale_coords(imgs[si].shape[1:], kpd[:, :4], shape)
@@ -117,6 +118,7 @@ def post_process_batch(data, imgs, paths, shapes, person_dets, kp_dets,
                                 pose_kps[kp_match] = [x, y, conf]
                                 n_fused[int(cls - 1)] += 1
                         poses[mask] = poses_mask
+                        print('after:', poses_mask)
 
                 poses = [p + origin for p in poses]
 
