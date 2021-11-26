@@ -97,13 +97,15 @@ def post_process_batch(data, imgs, paths, shapes, person_dets, kp_dets,
                 scores = pd[:, 4].cpu().numpy()  # person detection score
                 bboxes = scale_coords(imgs[si].shape[1:], pd[:, :4], shape).round().cpu().numpy()
                 poses = scale_coords(imgs[si].shape[1:], pd[:, -data['num_coords']:], shape).cpu().numpy()
+                # (num_person, 17, 2)
                 poses = poses.reshape((nd, -data['num_coords'], 2))
+                # (num_person, 17, 3)
                 poses = np.concatenate((poses, np.zeros((nd, poses.shape[1], 1))), axis=-1)
 
                 if data['use_kp_dets'] and nkp:
                     mask = scores > data['conf_thres_kp_person']
                     poses_mask = poses[mask]
-                    print('before:', poses_mask)
+                    # print('before:', poses_mask)
 
                     if len(poses_mask):
                         kpd[:, :4] = scale_coords(imgs[si].shape[1:], kpd[:, :4], shape)
@@ -118,7 +120,7 @@ def post_process_batch(data, imgs, paths, shapes, person_dets, kp_dets,
                                 pose_kps[kp_match] = [x, y, conf]
                                 n_fused[int(cls - 1)] += 1
                         poses[mask] = poses_mask
-                        print('after:', poses_mask)
+                        # print('after:', poses_mask)
 
                 poses = [p + origin for p in poses]
 
